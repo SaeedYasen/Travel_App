@@ -1,10 +1,10 @@
 import React,{useEffect, useState} from "react";
 import { SafeAreaView, Text} from "react-native";
 import styles  from "./styles";
-const Title=({text})=>{
+const Title=({text,style})=>{
     return (
         <SafeAreaView>
-            <Text style ={styles.title}>{text}</Text>
+            <Text style ={[styles.title,style]}>{text}</Text>
            
 
         </SafeAreaView>
