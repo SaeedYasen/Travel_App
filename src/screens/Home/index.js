@@ -1,23 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { View, SafeAreaView, FlatList, ScrollView} from "react-native";
+import { View, SafeAreaView, FlatList, Text} from "react-native";
 import Title from "../../components/Title";
 import styles from "./styles"
 import Categories from "../../components/Categories";
 import AttractionCard from "../../components/AttractionCard";
 import jsonData from '../../data/attractions.json'
+import category from '../../data/category.json'
+const All="All";
 const Home=()=>{
-    const [selectedCategory,setSelectedCategory]=useState('All')
+    const [selectedCategory,setSelectedCategory]=useState(All)
     const [data,setData]= useState([]);
     useEffect(()=>{
-        console.log('jsonData :>>',jsonData);
         setData(jsonData)
-    })
+    },[])
+    useEffect(()=>{
+        if(selectedCategory===All){
+            setData(jsonData)
+        }else{
+            const filteredData=jsonData?.filter(item=> item?.categories?.includes(selectedCategory));
+            setData(filteredData);
+        }
+    },[selectedCategory])
     return (
         <SafeAreaView style={styles.container}>
                     <FlatList showsVerticalScrollIndicator={false}
                         data={data}
                         numColumns={2}
                         style={{flexGrow:1}}
+                        ListEmptyComponent={(<Text style={styles.emptyText}>No items found.</Text>)}
                         ListHeaderComponent={(
                             <>
                             <View>
@@ -27,7 +37,7 @@ const Home=()=>{
                                 <Categories 
                                     selectedCategory={selectedCategory}
                                     onCategoryPress={setSelectedCategory}
-                                    categories={['All','Popular','Historical','Random','others','trending']}
+                                    categories={[All,...category]}
 
                                     />
                                 </View>
